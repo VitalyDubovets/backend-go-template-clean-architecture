@@ -16,6 +16,11 @@ type BaseLogger interface {
 	Warn(args ...any)
 	Error(args ...any)
 	Fatal(args ...any)
+	Debugf(template string, args ...any)
+	Infof(template string, args ...any)
+	Warnf(template string, args ...any)
+	Errorf(template string, args ...any)
+	Fatalf(template string, args ...any)
 }
 
 type BaseLog struct {
@@ -40,6 +45,26 @@ func (b *BaseLog) Error(args ...any) {
 
 func (b *BaseLog) Fatal(args ...any) {
 	b.log.Fatalln(args)
+}
+
+func (b *BaseLog) Debugf(template string, args ...any) {
+	b.log.Printf(template, args)
+}
+
+func (b *BaseLog) Infof(template string, args ...any) {
+	b.log.Printf(template, args)
+}
+
+func (b *BaseLog) Warnf(template string, args ...any) {
+	b.log.Printf(template, args)
+}
+
+func (b *BaseLog) Errorf(template string, args ...any) {
+	b.log.Printf(template, args)
+}
+
+func (b *BaseLog) Fatalf(template string, args ...any) {
+	b.log.Fatalf(template, args)
 }
 
 func GetLogInstance() BaseLogger {

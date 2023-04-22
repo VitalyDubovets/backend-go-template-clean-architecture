@@ -11,27 +11,47 @@ import (
 var mu sync.Mutex
 
 type ZapLog struct {
-	logger *zap.SugaredLogger
+	log *zap.SugaredLogger
 }
 
 func (z *ZapLog) Debug(args ...any) {
-	z.logger.Debug(args)
+	z.log.Debug(args)
 }
 
 func (z *ZapLog) Info(args ...any) {
-	z.logger.Info(args)
+	z.log.Info(args)
 }
 
 func (z *ZapLog) Warn(args ...any) {
-	z.logger.Warn(args)
+	z.log.Warn(args)
 }
 
 func (z *ZapLog) Error(args ...any) {
-	z.logger.Error(args)
+	z.log.Error(args)
 }
 
 func (z *ZapLog) Fatal(args ...any) {
-	z.logger.Fatal(args)
+	z.log.Fatal(args)
+}
+
+func (z *ZapLog) Debugf(template string, args ...any) {
+	z.log.Debugf(template, args)
+}
+
+func (z *ZapLog) Infof(template string, args ...any) {
+	z.log.Infof(template, args)
+}
+
+func (z *ZapLog) Warnf(template string, args ...any) {
+	z.Warnf(template, args)
+}
+
+func (z *ZapLog) Errorf(template string, args ...any) {
+	z.Errorf(template, args)
+}
+
+func (z *ZapLog) Fatalf(template string, args ...any) {
+	z.Fatalf(template, args)
 }
 
 func NewZapLog(config *config.LogConfig) (syncFn func(), err error) {
@@ -66,7 +86,7 @@ func NewZapLog(config *config.LogConfig) (syncFn func(), err error) {
 	}
 
 	mu.Lock()
-	log = &ZapLog{logger: zapLog.Sugar()}
+	log = &ZapLog{log: zapLog.Sugar()}
 	mu.Unlock()
 
 	return nil, err
