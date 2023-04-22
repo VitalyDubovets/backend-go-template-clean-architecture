@@ -2,9 +2,13 @@ package log
 
 import (
 	"backend/internal/infrastructure/config"
+	"sync"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
+
+var mu sync.Mutex
 
 type ZapLog struct {
 	logger *zap.SugaredLogger
@@ -30,7 +34,7 @@ func (z *ZapLog) Fatal(args ...any) {
 	z.logger.Fatal(args)
 }
 
-func NewZapLog(config *config.AppConfig) (syncFn func(), err error) {
+func NewZapLog(config *config.LogConfig) (syncFn func(), err error) {
 	logLvl, err := zapcore.ParseLevel(config.LogLevel)
 	if err != nil {
 		return nil, err
@@ -61,9 +65,9 @@ func NewZapLog(config *config.AppConfig) (syncFn func(), err error) {
 		return nil, err
 	}
 
-	zap.ReplaceGlobals(zapLog)
-
+	mu.Lock()
 	log = &ZapLog{logger: zapLog.Sugar()}
+	mu.Unlock()
 
 	return nil, err
 }
