@@ -1,0 +1,324 @@
+linters:
+  enable:
+    # Default
+    - errcheck # errcheck is a program for checking for unchecked errors in Go code. These unchecked errors can be critical bugs in some cases
+    - gosimple # Linter for Go source code that specializes in simplifying code
+    - govet # Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string
+    - ineffassign # Detects when assignments to existing variables are not used
+    - staticcheck # It's a set of rules from staticcheck.
+    - typecheck # Like the front-end of a Go compiler, parses and type-checks Go code
+    - unused # Checks Go code for unused constants, variables, functions and types
+    # Additional
+    - asciicheck # Simple linter to check that your code does not contain non-ASCII identifiers
+    - bodyclose # checks whether HTTP response body is closed successfully
+    - cyclop # checks function and package cyclomatic complexity
+    - depguard # Go linter that checks if package imports are in a list of acceptable packages
+    - dogsled # Checks assignments with too many blank identifiers (e.g. x, , , _, := f())
+    - durationcheck # check for two durations multiplied together
+    - errorlint # errorlint is a linter for that can be used to find code that will cause problems with the error wrapping scheme introduced in Go 1.13.
+    - exhaustive # check exhaustiveness of enum switch statements
+    - exportloopref # checks for pointers to enclosing loop variables
+    - forbidigo # Forbids identifiers
+    - forcetypeassert # finds forced type assertions
+    - gocognit # Computes and checks the cognitive complexity of functions
+    - goconst # Finds repeated strings that could be replaced by a constant
+    - gocritic # Provides diagnostics that check for bugs, performance and style issues.
+    - goerr113 # Go linter to check the errors handling expressions
+    - gofmt # Gofmt checks whether code was gofmt-ed.
+    - gofumpt # Gofumpt checks whether code was gofumpt-ed.
+    - goimports # Check import statements are formatted according to the 'goimport' command. Reformat imports in autofix mode.
+    - gomnd # An analyzer to detect magic numbers.
+    - goprintffuncname # Checks that printf-like functions are named with f at the end
+    - gosec # Inspects source code for security problems
+    - importas # Enforces consistent import aliases
+    - interfacebloat # A linter that checks the number of methods inside an interface.
+    - maintidx # maintidx measures the maintainability index of each function.
+    - makezero # Finds slice declarations with non-zero initial length
+    - misspell # Finds commonly misspelled English words in comments
+    - nakedret # Finds naked returns in functions greater than a specified function length
+    - nilerr # Finds the code that returns nil even if it checks that the error is not nil.
+    - noctx # Finds sending http request without context.Context
+    - nolintlint # Reports ill-formed or insufficient nolint directives
+    - prealloc # Finds slice declarations that could potentially be pre-allocated
+    - predeclared # find code that shadows one of Go's predeclared identifiers
+    - reassign # Checks that package variables are not reassigned
+    - revive # Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement of golint.
+    - rowserrcheck # checks whether Err of rows is checked successfully
+    - sqlclosecheck # Checks that sql.Rows and sql.Stmt are closed.
+    - testpackage # linter that makes you use a separate _test package
+    - thelper # thelper detects Go test helpers without t.Helper() call and checks the consistency of test helpers
+    - unconvert # Remove unnecessary type conversions
+    - usestdlibvars # A linter that detect the possibility to use variables/constants from the Go standard library.
+    - wastedassign # wastedassign finds wasted assignment statements.
+    - whitespace # Tool for detection of leading and trailing whitespace
+    - wsl # Whitespace Linter - Forces you to use empty lines!
+
+linters-settings:
+  errcheck:
+    # Report about not checking of errors in type assertions: `a := b.(MyStruct)`.
+    # Such cases aren't reported by default.
+    # Default: false
+    check-type-assertions: true
+    # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`.
+    # Such cases aren't reported by default.
+    # Default: false
+    check-blank: true
+
+  gosimple:
+    # Deprecated: use the global `run.go` instead.
+    go: "1.20"
+    # Sxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
+    # Default: ["*"]
+    checks: [ "all" ]
+
+  govet:
+    # Report about shadowed variables.
+    check-shadowing: false
+    # Settings per analyzer.
+    enable-all: true
+    # Disable analyzers by name.
+    # Run `go tool vet help` to see all analyzers.
+    disable:
+      - fieldalignment
+      - shadow
+
+  staticcheck:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.20"
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all" ]
+
+  dogsled:
+    # checks assignments with too many blank identifiers; default is 2
+    max-blank-identifiers: 2
+
+  errorlint:
+    # Check whether fmt.Errorf uses the %w verb for formatting errors. See the readme for caveats
+    errorf: true
+    # Check for plain type assertions and type switches
+    asserts: true
+    # Check for plain error comparisons
+    comparison: true
+
+  exhaustive:
+    # check switch statements in generated files also
+    check-generated: false
+    # indicates that switch statements are to be considered exhaustive if a
+    # 'default' case is present, even if all enum members aren't listed in the
+    # switch
+    default-signifies-exhaustive: true
+
+  forbidigo:
+    # Forbid the following identifiers (identifiers are written using regexp):
+    forbid:
+      - '^fmt\.Print.*$' # forbid use of Print statements because they are likely just for debugging
+      - '^fmt\.Errorf$' # forbid Errorf in favor of using github.com/pkg/errors
+
+  gocognit:
+    # Minimal code complexity to report.
+    # Default: 30 (but we recommend 10-20)
+    min-complexity: 20
+
+  goconst:
+    min-len: 2
+    min-occurrences: 3
+
+  gocritic:
+    # Enable multiple checks by tags, run `GL_DEBUG=gocritic golangci-lint run` to see all tags and checks.
+    # Empty list by default. See https://github.com/go-critic/go-critic#usage -> section "Tags".
+    enabled-checks:
+      - commentedOutCode
+      - hugeParam
+      - unnamedResult
+      - nestingReduce
+      - ruleguard
+      - truncateCmp
+    enabled-tags:
+      - diagnostic
+      - style
+      - performance
+      - experimental
+      - opinionated
+
+  gofumpt:
+    # Select the Go version to target.
+    lang-version: "1.20"
+    # Choose whether to use the extra rules that are disabled
+    # by default
+    extra-rules: false
+
+  gomnd:
+    # List of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
+    # Default: ["argument", "case", "condition", "operation", "return", "assign"]
+    checks:
+      - argument
+      - case
+      - condition
+      - operation
+      - return
+      - assign
+
+  makezero:
+    # Allow only slices initialized with a length of zero.
+    # Default: false
+    always: false
+
+  nakedret:
+    # Make an issue if func has more lines of code than this setting, and it has naked returns.
+    # Default: 30
+    max-func-lines: 30
+
+  nolintlint:
+    # Enable to ensure that nolint directives are all used. Default is true.
+    allow-unused: true
+    # Disable to ensure that nolint directives don't have a leading space. Default is true.
+    allow-leading-space: true
+    # Exclude following linters from requiring an explanation.  Default is [].
+    allow-no-explanation: []
+    # Enable to require an explanation of nonzero length after each nolint directive. Default is false.
+    require-explanation: true
+    # Enable to require nolint directives to mention the specific linter being suppressed. Default is false.
+    require-specific: true
+
+  prealloc:
+    # Report pre-allocation suggestions only on simple loops that have no returns/breaks/continues/gotos in them.
+    # Default: true
+    simple: true
+    # Report pre-allocation suggestions on range loops.
+    # Default: true
+    range-loops: true
+    # Report pre-allocation suggestions on for loops.
+    # Default: false
+    for-loops: true
+
+  revive:
+    # see https://github.com/mgechev/revive#available-rules for details.
+    ignore-generated-header: false
+    severity: warning
+    rules:
+      - name: context-as-argument
+      - name: context-keys-type
+      - name: dot-imports
+      - name: error-return
+      - name: error-strings
+      - name: error-naming
+      - name: exported
+      - name: if-return
+      - name: increment-decrement
+      - name: var-naming
+      - name: var-declaration
+      - name: package-comments
+      - name: range
+      - name: receiver-naming
+      - name: time-naming
+      - name: unexported-return
+      - name: indent-error-flow
+      - name: errorf
+      - name: empty-block
+      - name: superfluous-else
+      - name: unused-parameter
+      - name: unreachable-code
+      - name: redefines-builtin-id
+
+  rowserrcheck:
+    # database/sql is always checked
+    # Default: []
+    packages:
+      - github.com/jmoiron/sqlx
+
+  thelper:
+    test:
+      # Check *testing.T is first param (or after context.Context) of helper function.
+      # Default: true
+      first: true
+      # Check *testing.T param has name t.
+      # Default: true
+      name: true
+      # Check t.Helper() begins helper function.
+      # Default: true
+      begin: true
+    benchmark:
+      # Check *testing.B is first param (or after context.Context) of helper function.
+      # Default: true
+      first: true
+      # Check *testing.B param has name b.
+      # Default: true
+      name: true
+      # Check b.Helper() begins helper function.
+      # Default: true
+      begin: true
+    tb:
+      # Check *testing.TB is first param (or after context.Context) of helper function.
+      # Default: true
+      first: true
+      # Check *testing.TB param has name tb.
+      # Default: true
+      name: true
+      # Check tb.Helper() begins helper function.
+      # Default: true
+      begin: true
+    fuzz:
+      # Check *testing.F is first param (or after context.Context) of helper function.
+      # Default: true
+      first: true
+      # Check *testing.F param has name f.
+      # Default: true
+      name: true
+      # Check f.Helper() begins helper function.
+      # Default: true
+      begin: true
+
+  usestdlibvars:
+    # Suggest the use of http.MethodXX.
+    # Default: true
+    http-method: true
+    # Suggest the use of http.StatusXX.
+    # Default: true
+    http-status-code: true
+    # Suggest the use of time.Weekday.String().
+    # Default: true
+    time-weekday: true
+    # Suggest the use of time.Month.String().
+    # Default: false
+    time-month: true
+    # Suggest the use of time.Layout.
+    # Default: false
+    time-layout: true
+    # Suggest the use of crypto.Hash.String().
+    # Default: false
+    crypto-hash: true
+    # Suggest the use of rpc.DefaultXXPath.
+    # Default: false
+    default-rpc-path: true
+    # Suggest the use of sql.LevelXX.String().
+    # Default: false
+    sql-isolation-level: true
+    # Suggest the use of tls.SignatureScheme.String().
+    # Default: false
+    tls-signature-scheme: true
+    # Suggest the use of constant.Kind.String().
+    # Default: false
+    constant-kind: true
+
+  whitespace:
+    multi-if: false # Enforces newlines (or comments) after every multi-line if statement
+    multi-func: false # Enforces newlines (or comments) after every multi-line function signature
+
+  wsl:
+    # See https://github.com/bombsimon/wsl/blob/master/doc/configuration.md for
+    # documentation of available settings. These are the defaults for
+    # `golangci-lint`.
+    allow-assign-and-anything: false
+    allow-assign-and-call: true
+    allow-cuddle-declarations: false
+    allow-multiline-assign: true
+    allow-separated-leading-comment: false
+    allow-trailing-comment: false
+    force-case-trailing-whitespace: 0
+    force-err-cuddling: false
+    force-short-decl-cuddling: false
+    strict-append: true
+
+run:
+  issues-exit-code: 1
+  go: "1.20"
