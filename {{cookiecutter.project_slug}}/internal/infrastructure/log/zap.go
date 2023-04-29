@@ -2,65 +2,62 @@ package log
 
 import (
 	"backend/internal/infrastructure/config"
-	"sync"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-var mu sync.Mutex
-
-type ZapLog struct {
+type zapLog struct {
 	log *zap.SugaredLogger
 }
 
-func (z *ZapLog) Debug(args ...any) {
+func (z *zapLog) Debug(args ...any) {
 	z.log.Debug(args)
 }
 
-func (z *ZapLog) Info(args ...any) {
+func (z *zapLog) Info(args ...any) {
 	z.log.Info(args)
 }
 
-func (z *ZapLog) Warn(args ...any) {
+func (z *zapLog) Warn(args ...any) {
 	z.log.Warn(args)
 }
 
-func (z *ZapLog) Error(args ...any) {
+func (z *zapLog) Error(args ...any) {
 	z.log.Error(args)
 }
 
-func (z *ZapLog) Fatal(args ...any) {
+func (z *zapLog) Fatal(args ...any) {
 	z.log.Fatal(args)
 }
 
-func (z *ZapLog) Debugf(template string, args ...any) {
+func (z *zapLog) Debugf(template string, args ...any) {
 	z.log.Debugf(template, args)
 }
 
-func (z *ZapLog) Infof(template string, args ...any) {
+func (z *zapLog) Infof(template string, args ...any) {
 	z.log.Infof(template, args)
 }
 
-func (z *ZapLog) Warnf(template string, args ...any) {
+func (z *zapLog) Warnf(template string, args ...any) {
 	z.Warnf(template, args)
 }
 
-func (z *ZapLog) Errorf(template string, args ...any) {
+func (z *zapLog) Errorf(template string, args ...any) {
 	z.Errorf(template, args)
 }
 
-func (z *ZapLog) Fatalf(template string, args ...any) {
+func (z *zapLog) Fatalf(template string, args ...any) {
 	z.Fatalf(template, args)
 }
 
-func NewZapLog(config *config.LogConfig) (syncFn func(), err error) {
+func NewZapLog(config *config.LogConfig) (BaseLogger, func(), error) {
 	logLvl, err := zapcore.ParseLevel(config.LogLevel)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	zapLog, err := zap.Config{
+	log, err := zap.Config{
 		Encoding:         config.LogFormat,
 		Level:            zap.NewAtomicLevelAt(logLvl),
 		OutputPaths:      []string{"stderr"},
@@ -82,12 +79,8 @@ func NewZapLog(config *config.LogConfig) (syncFn func(), err error) {
 	}.Build()
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	mu.Lock()
-	log = &ZapLog{log: zapLog.Sugar()}
-	mu.Unlock()
-
-	return nil, err
+	return &zapLog{log: log.Sugar()}, nil, err
 }
