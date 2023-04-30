@@ -1,11 +1,10 @@
 package config
 
-import "github.com/caarlos0/env/v8"
-
 type AppConfig struct {
-	LogConfig     *LogConfig
-	SentryConfig  *SentryConfig
-	TracingConfig *TracingConfig
+	LogConfig                  *LogConfig
+	SentryConfig               *SentryConfig
+	TracingConfig              *TracingConfig
+	ShutDownApplicationTimeout uint8 `env:"SHUTDOWN_APPLICATION_TIMEOUT" envDefault:"5"`
 }
 
 func NewAppConfig() (*AppConfig, error) {

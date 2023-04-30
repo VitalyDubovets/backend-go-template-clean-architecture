@@ -1,4 +1,4 @@
-package log
+package logger
 
 import (
 	l "log"
@@ -22,43 +22,43 @@ type baseLog struct {
 }
 
 func (b *baseLog) Debug(args ...any) {
-	b.log.Println(args)
+	b.log.Println(args...)
 }
 
 func (b *baseLog) Info(args ...any) {
-	b.log.Println(args)
+	b.log.Println(args...)
 }
 
 func (b *baseLog) Warn(args ...any) {
-	b.log.Println(args)
+	b.log.Println(args...)
 }
 
 func (b *baseLog) Error(args ...any) {
-	b.log.Println(args)
+	b.log.Println(args...)
 }
 
 func (b *baseLog) Fatal(args ...any) {
-	b.log.Fatalln(args)
+	b.log.Fatalln(args...)
 }
 
 func (b *baseLog) Debugf(template string, args ...any) {
-	b.log.Printf(template, args)
+	b.log.Printf(template, args...)
 }
 
 func (b *baseLog) Infof(template string, args ...any) {
-	b.log.Printf(template, args)
+	b.log.Printf(template, args...)
 }
 
 func (b *baseLog) Warnf(template string, args ...any) {
-	b.log.Printf(template, args)
+	b.log.Printf(template, args...)
 }
 
 func (b *baseLog) Errorf(template string, args ...any) {
-	b.log.Printf(template, args)
+	b.log.Printf(template, args...)
 }
 
 func (b *baseLog) Fatalf(template string, args ...any) {
-	b.log.Fatalf(template, args)
+	b.log.Fatalf(template, args...)
 }
 
 func newNop() *baseLog {

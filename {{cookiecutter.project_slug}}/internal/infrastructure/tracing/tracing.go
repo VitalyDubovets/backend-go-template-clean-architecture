@@ -1,7 +1,7 @@
 package tracing
 
 import (
-	"backend/internal/infrastructure/config"
+	"{{ cookiecutter.project_slug }}/internal/infrastructure/config"
 
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/jaeger"
@@ -10,8 +10,8 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
 )
 
-func InitTracerProvider(config *config.TracingConfig) (*tracesdk.TracerProvider, error) {
-	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(config.ServiceURL)))
+func InitTracerProvider(tracingConfig *config.TracingConfig) (*tracesdk.TracerProvider, error) {
+	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(tracingConfig.ServiceURL)))
 	if err != nil {
 		return nil, err
 	}
@@ -19,9 +19,9 @@ func InitTracerProvider(config *config.TracingConfig) (*tracesdk.TracerProvider,
 		tracesdk.WithBatcher(exp),
 		tracesdk.WithResource(resource.NewWithAttributes(
 			semconv.SchemaURL,
-			semconv.ServiceName(config.ServiceName),
-			attribute.String("environment", config.Environment),
-			attribute.Int64("ID", config.ServiceID),
+			semconv.ServiceName(tracingConfig.ServiceName),
+			attribute.String("environment", tracingConfig.Environment),
+			attribute.Int64("ID", tracingConfig.ServiceID),
 		)),
 	)
 
