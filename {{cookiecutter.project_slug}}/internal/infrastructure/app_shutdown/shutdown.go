@@ -39,7 +39,7 @@ func ShutDownApplication(ctx context.Context, timeout time.Duration, handlers ma
 				log.Infof("Shutting down: %s", innerKey)
 
 				if err := innerHandler(ctx); err != nil {
-					log.Infof("%s: shutdown was failed: %s", innerKey, err)
+					log.Warnf("%s: shutdown was failed: %s", innerKey, err)
 					return
 				}
 

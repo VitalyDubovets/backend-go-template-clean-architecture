@@ -59,7 +59,7 @@ func main() {
 			ctx, spanSentry := trs.Start(ctx, "sentryShutdown")
 			defer spanSentry.End()
 
-			sentry.Flush(time.Duration(appConfig.SentryConfig.Timeout) * time.Second)
+			sentry.Flush(time.Duration(appConfig.SentryConfig.FlushTimeout) * time.Second)
 			return nil
 		},
 		"tracing": func(ctx context.Context) error {
