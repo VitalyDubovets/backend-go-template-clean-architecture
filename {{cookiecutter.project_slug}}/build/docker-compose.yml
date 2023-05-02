@@ -6,7 +6,7 @@ networks:
 
 services:
   orders-application:
-    container_name: orders_application
+    container_name: {{ cookiecutter.project_slug }}_application
     networks:
       shared-network:
     build:
@@ -26,14 +26,14 @@ services:
       - db
 
   # Run dependencies
-  orders-db:
-    container_name: orders_db
+  {{ cookiecutter.project_slug }}-db:
+    container_name: {{ cookiecutter.project_slug }}_db
     networks:
       - shared-network
     image: postgres:15-alpine
     environment:
-      POSTGRES_PASSWORD: orders
-      POSTGRES_USER: orders
+      POSTGRES_PASSWORD: {{ cookiecutter.project_slug }}
+      POSTGRES_USER: {{ cookiecutter.project_slug }}
     ports:
       - "5433:5432"
     expose:

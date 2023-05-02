@@ -10,7 +10,7 @@ WORKDIR $PROJECT_DIR
 
 COPY . .
 
-RUN go build -ldflags="-w -s" ./cmd/orders
+RUN go build -ldflags="-w -s" ./cmd/{{ cookiecutter.project_slug }}
 
 FROM scratch
 
