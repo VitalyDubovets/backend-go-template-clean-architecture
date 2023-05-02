@@ -1,0 +1,40 @@
+version: '3.8'
+
+networks:
+  shared-network:
+    driver: bridge
+
+services:
+  orders-application:
+    container_name: orders_application
+    networks:
+      shared-network:
+    build:
+      context: .
+    env_file:
+      - ../.env
+    command: [ "http" ]
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://localhost:8000/healthcheck/liveness" ]
+#      interval: 30s
+#      timeout: 20s
+#      retries: 3
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  # Run dependencies
+  orders-db:
+    container_name: orders_db
+    networks:
+      - shared-network
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_PASSWORD: orders
+      POSTGRES_USER: orders
+    ports:
+      - "5433:5432"
+    expose:
+      - 5433
