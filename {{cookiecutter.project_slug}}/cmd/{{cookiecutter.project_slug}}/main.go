@@ -6,14 +6,17 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	appshutdown "{{ cookiecutter.project_slug }}/internal/infra/app_shutdown"
 	"{{ cookiecutter.project_slug }}/internal/infra/config"
+	database "{{ cookiecutter.project_slug }}/internal/infra/db"
 	"{{ cookiecutter.project_slug }}/internal/infra/infraerrors"
 	"{{ cookiecutter.project_slug }}/internal/infra/logger"
-	sentryapp "{{ cookiecutter.project_slug }}/internal/infra/sentry_app"
 	"{{ cookiecutter.project_slug }}/internal/infra/tracing"
 
 	"go.opentelemetry.io/otel"
+
+	appshutdown "{{ cookiecutter.project_slug }}/internal/infra/app_shutdown"
+
+	sentryapp "{{ cookiecutter.project_slug }}/internal/infra/sentry_app"
 )
 
 func main() {
@@ -41,6 +44,11 @@ func main() {
 		log.Fatalf("tracing.Init: %s", err)
 	}
 
+	db, err := database.NewDB(appConfig.DBConfig)
+	if err != nil {
+		log.Fatalf("database.Init: %s", err)
+	}
+
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 
@@ -53,10 +61,18 @@ func main() {
 
 	applicationTimeout := time.Duration(appConfig.ShutDownApplicationTimeout) * time.Second
 	waitCh := appshutdown.ShutDownApplication(ctx, applicationTimeout, map[string]appshutdown.Handler{
+		"db": func(ctx context.Context) error {
+			trs := tp.Tracer("component-db-shutdown")
+
+			_, spanSentry := trs.Start(ctx, "dbShutdown")
+			defer spanSentry.End()
+
+			return db.Close()
+		},
 		"sentry": func(ctx context.Context) error {
 			trs := tp.Tracer("component-sentry-shutdown")
 
-			ctx, spanSentry := trs.Start(ctx, "sentryShutdown")
+			_, spanSentry := trs.Start(ctx, "sentryShutdown")
 			defer spanSentry.End()
 
 			sentry.Flush(time.Duration(appConfig.SentryConfig.FlushTimeout) * time.Second)
@@ -73,7 +89,7 @@ func main() {
 		"logger": func(ctx context.Context) error {
 			trs := tp.Tracer("component-logger-shutdown")
 
-			ctx, spanSentry := trs.Start(ctx, "loggerShutdown")
+			_, spanSentry := trs.Start(ctx, "loggerShutdown")
 			defer spanSentry.End()
 
 			return flushFn()

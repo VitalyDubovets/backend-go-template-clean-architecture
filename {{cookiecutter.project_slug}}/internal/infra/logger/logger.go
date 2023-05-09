@@ -2,6 +2,7 @@ package logger
 
 import (
 	l "log"
+	"os"
 )
 
 type BaseLogger interface {
@@ -62,5 +63,5 @@ func (b *baseLog) Fatalf(template string, args ...any) {
 }
 
 func newNop() *baseLog {
-	return &baseLog{log: l.Default()}
+	return &baseLog{log: l.New(os.Stderr, "", l.LstdFlags|l.Llongfile|l.LUTC)}
 }
