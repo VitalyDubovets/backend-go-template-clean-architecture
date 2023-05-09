@@ -1,7 +1,7 @@
 package sentryapp
 
 import (
-	"{{ cookiecutter.project_slug }}/internal/infrastructure/config"
+	"{{ cookiecutter.project_slug }}/internal/infra/config"
 )
 
 func InitSentry(sentryConfig *config.SentryConfig) error {

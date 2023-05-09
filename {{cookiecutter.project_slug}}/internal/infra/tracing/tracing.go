@@ -1,7 +1,7 @@
 package tracing
 
 import (
-	"{{ cookiecutter.project_slug }}/internal/infrastructure/config"
+	"{{ cookiecutter.project_slug }}/internal/infra/config"
 
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/jaeger"

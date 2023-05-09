@@ -6,12 +6,12 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	appshutdown "{{ cookiecutter.project_slug }}/internal/infrastructure/app_shutdown"
-	"{{ cookiecutter.project_slug }}/internal/infrastructure/config"
-	"{{ cookiecutter.project_slug }}/internal/infrastructure/infraerrors"
-	"{{ cookiecutter.project_slug }}/internal/infrastructure/logger"
-	sentryapp "{{ cookiecutter.project_slug }}/internal/infrastructure/sentry_app"
-	"{{ cookiecutter.project_slug }}/internal/infrastructure/tracing"
+	appshutdown "{{ cookiecutter.project_slug }}/internal/infra/app_shutdown"
+	"{{ cookiecutter.project_slug }}/internal/infra/config"
+	"{{ cookiecutter.project_slug }}/internal/infra/infraerrors"
+	"{{ cookiecutter.project_slug }}/internal/infra/logger"
+	sentryapp "{{ cookiecutter.project_slug }}/internal/infra/sentry_app"
+	"{{ cookiecutter.project_slug }}/internal/infra/tracing"
 
 	"go.opentelemetry.io/otel"
 )

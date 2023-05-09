@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"{{ cookiecutter.project_slug }}/internal/infrastructure/config"
+	"{{ cookiecutter.project_slug }}/internal/infra/config"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

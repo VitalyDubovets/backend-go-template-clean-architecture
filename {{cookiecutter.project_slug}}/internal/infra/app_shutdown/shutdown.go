@@ -5,7 +5,7 @@ import (
 	"os"
 	"sync"
 	"time"
-	"{{ cookiecutter.project_slug }}/internal/infrastructure/logger"
+	"{{ cookiecutter.project_slug }}/internal/infra/logger"
 )
 
 type Handler func(ctx context.Context) error
